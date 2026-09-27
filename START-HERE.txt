@@ -1,0 +1,55 @@
+HF TRAINING — APPWRITE CONNECTION SETUP
+
+STATUS
+This is a connection configuration checkpoint, not a replacement website or
+completed live application. Keep your current website files for now.
+The supplied project ID and endpoint have been recorded, not authenticated or
+verified against your Appwrite console. No cloud settings have been changed.
+
+1. REGISTER YOUR WEBSITE
+Open your HF Training project in Appwrite Cloud.
+Choose Add a platform, then Web app (sometimes shown under Platforms).
+Name: HF Training website
+Hostname: hf-training-1.github.io
+Do not include https:// or /HF-Training-1/ in the hostname field.
+Save the platform. This hostname covers both existing HF Training repository paths.
+If your actual GitHub hostname has changed, use its exact hostname instead.
+
+2. INITIAL ADMINISTRATOR ACCOUNT — PRIVATE CONSOLE SETUP
+In the same project, open Auth / Users and choose Create user.
+Email: Shane@hairforce-1.co.uk
+Name: Shane Spellacey
+Choose a unique password privately in the console. Never send or commit it.
+If an account already exists for this email, do not create a duplicate.
+Copy the User ID for the application setup. The User ID is not the password.
+Creating this user does not yet grant HF Training administrator privileges.
+The application's server-side setup must explicitly assign those privileges
+to this verified account ID; never grant them because a visitor types an email.
+Do not manually mark an unknown or unverified person's email as verified.
+
+3. WHAT IS STILL REQUIRED
+- Private database and file storage, with no public read/write access.
+- Server-side account provisioning and administrator role assignment.
+- Academy, tutor, IQA, student and employer permission enforcement.
+- Enrolment and consent forms, reviews, signatures and approval history.
+- Integration with the existing visual design and replacement of local demo APIs.
+- Permission tests against the configured service, using fictional records first.
+- Recovery, backup, retention and safeguarding access configuration.
+
+Never put student documents, passwords, API keys or exports in a public GitHub
+repository. The connection file is public configuration, not a secret.
+Do not enter real student records into the old browser-only prototype.
+
+EMAIL
+The supplied helper opens the person's own email application addressed to
+Shane@hairforce-1.co.uk. The person must send the email themselves. It does not
+save a support case, track delivery, or email automatically.
+
+DEVELOPER CONNECTION
+appwrite-config.js exports public settings and createAppwriteClients(Appwrite).
+Pass the installed Appwrite Web SDK namespace to this factory. The final app
+must bundle a pinned SDK and enforce roles in server-side code and Appwrite
+permissions. Do not reuse the old demo-store.js for live records. Do not switch
+back to local demo data when the service is unavailable.
+
+Reference: https://appwrite.io/docs/quick-starts/web
