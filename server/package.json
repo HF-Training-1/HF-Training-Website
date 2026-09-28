@@ -1,0 +1,9 @@
+{
+  "name": "hf-training-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "node-appwrite": "29.0.0"
+  }
+}

@@ -1,0 +1,11 @@
+import {COURSES} from './config.mjs';
+export class Problem extends Error { constructor(message,code=400){super(message);this.code=code;} }
+export function requireThat(ok,message='Access denied.',code=403){if(!ok)throw new Problem(message,code);}
+export function text(v,max=4000,required=true){requireThat(typeof v==='string','Enter text.',400);v=v.trim();requireThat((!required||v.length>0)&&v.length<=max,'Text is missing or too long.',400);return v;}
+export function date(v){v=text(v,10);const d=new Date(v);requireThat(/^\d{4}-\d{2}-\d{2}$/.test(v)&&!Number.isNaN(d.getTime())&&d.toISOString().slice(0,10)===v,'Enter a valid date.',400);return v;}
+export function hasAccess(actor,learner){return actor.active!==false&&learner.role==='learner'&&(actor.role==='admin'||actor.role==='iqa'||(actor.role==='tutor'&&actor.academies.includes(learner.academy))||(actor.role==='learner'&&actor.id===learner.id)||(actor.role==='employer'&&actor.learners.includes(learner.id)));}
+export function canAssess(actor,learner){return hasAccess(actor,learner)&&['admin','tutor'].includes(actor.role)&&actor.id!==learner.id;}
+export function unitsFor(learner){const c=COURSES[learner.course];return c?[...c.units,...(c.optional||[]).filter(u=>(learner.optionalUnits||[]).includes(u[0]))]:[];}
+export function visibleProfile(actor,p){const basic={id:p.id,name:p.name,role:p.role,academy:p.academy,course:p.course,start:p.start,optionalUnits:p.optionalUnits||[],active:p.active};if(actor.role==='employer')return basic;return {...basic,...(['admin','learner'].includes(actor.role)?{details:p.details,email:p.email}:{}),...(['admin'].includes(actor.role)?{academies:p.academies,learners:p.learners}: {})};}
+export function visibleRecord(actor,r){if(r.kind==='audit')return actor.role==='admin';if(actor.role==='employer')return ['review','signature','approval'].includes(r.kind);if(r.kind==='consent')return ['admin','learner'].includes(actor.role);return true;}
+export function dueDate(start,reviews,today=new Date()){let base=start;for(const r of reviews){if(r.kind==='review'&&r.payload.date>base)base=r.payload.date;}const d=new Date(base+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+28);return {date:d.toISOString().slice(0,10),overdue:d<today};}
