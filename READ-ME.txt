@@ -1,0 +1,10 @@
+HF Training password form correction
+
+1. Upload index.html into the root of HF-Training-Website on GitHub, replacing the existing index.html. Keep its exact filename.
+2. Open the web folder in GitHub and upload app.mjs from this package's web folder, replacing the existing file.
+3. Commit both uploads to main. Wait for Publish HF Training website in Actions to complete successfully.
+4. Refresh the website with Ctrl+Shift+R. Enter the existing password exactly in Current password and a new password of at least 16 characters.
+
+No backend redeployment or API key is needed for this correction.
+Scope: removes the incorrect 16-character minimum from Current password; retains it on New password. This does not change stored passwords or fix all possible authentication errors.
+Validation: build passed; generated form attributes checked. Automated Chromium launch failed in this environment; live password change still needs checking after upload.
