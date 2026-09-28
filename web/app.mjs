@@ -5,7 +5,7 @@ const account=new Account(client),functions=new Functions(client);
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const state={me:null,verified:false,page:'overview',students:[],people:[],academies:[],lid:'',data:null};
 const today=()=>new Date().toLocaleDateString('en-CA',{timeZone:'Europe/London'}),later=d=>{const v=new Date(d+'T12:00:00Z');v.setUTCDate(v.getUTCDate()+28);return v.toISOString().slice(0,10);};
-const f=(name,label,type='text',value='',required=true)=>`<label>${esc(label)}<input name="${name}" type="${type}" value="${esc(value)}" ${required?'required':''} ${type==='password'?'minlength="16" autocomplete="new-password"':''}></label>`;
+const f=(name,label,type='text',value='',required=true)=>`<label>${esc(label)}<input name="${name}" type="${type}" value="${esc(value)}" ${required?'required':''} ${type==='password'?(name==='current'?'autocomplete="current-password"':'minlength="16" autocomplete="new-password"'):''}></label>`;
 const ta=(name,label,value='',required=true)=>`<label>${esc(label)}<textarea name="${name}" maxlength="4000" ${required?'required':''}>${esc(value)}</textarea></label>`;
 const options=(items,sel='')=>items.map(([v,n])=>`<option value="${esc(v)}" ${v===sel?'selected':''}>${esc(n)}</option>`).join('');
 const select=(name,label,items,sel='',multiple=false)=>`<label>${esc(label)}<select name="${name}" ${multiple?'multiple':''}>${options(items,sel)}</select></label>`;
