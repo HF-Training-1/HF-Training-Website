@@ -1,0 +1,24 @@
+name: Install HF Training backend
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hf-backend-install
+  cancel-in-progress: false
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - name: Create private storage and deploy the API
+        run: node setup/provision.mjs
+        env:
+          APPWRITE_SETUP_KEY: ${{ secrets.APPWRITE_SETUP_KEY }}

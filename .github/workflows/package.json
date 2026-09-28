@@ -1,0 +1,24 @@
+{
+  "name": "hf-training-live",
+  "version": "1.0.0",
+  "description": "",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "node setup/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "provision": "node setup/provision.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "appwrite": "28.1.0",
+    "esbuild": "0.28.2",
+    "node-appwrite": "29.0.0"
+  },
+  "private": true
+}
