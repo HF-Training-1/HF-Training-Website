@@ -3,7 +3,7 @@ import fs from 'node:fs';
 const result=await build({entryPoints:['web/app.mjs'],bundle:true,write:false,minify:true,format:'iife',target:['es2022'],legalComments:'none'});
 const css=fs.readFileSync('web/styles.css','utf8');
 const script=result.outputFiles[0].text.replace(/<\/script/gi,'<\\/script');
-const html=fs.readFileSync('web/index.template.html','utf8').replace('<!--STYLE-->','<style>'+css+'</style>').replace('<!--SCRIPT-->','<script>'+script+'</script>');
+const html=fs.readFileSync('web/index.template.html','utf8').replace('<!--STYLE-->',()=>'<style>'+css+'</style>').replace('<!--SCRIPT-->',()=>'<script>'+script+'</script>');
 fs.writeFileSync('index.html',html);
 fs.writeFileSync('manifest.webmanifest',JSON.stringify({name:'HF Training',short_name:'HF Training',start_url:'./',scope:'./',display:'standalone',background_color:'#f4f7fb',theme_color:'#101f35',icons:[{src:'./icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any'}]},null,2));
 fs.writeFileSync('icon.svg','<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><rect width="512" height="512" rx="96" fill="#101f35"/><text x="256" y="320" font-family="Arial,sans-serif" font-weight="700" font-size="230" text-anchor="middle" fill="#85b9fb">HF</text></svg>');
