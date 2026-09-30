@@ -1,0 +1,24 @@
+name: Update HF Training backend
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hf-backend-install
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - name: Deploy updated existing API
+        run: node setup/deploy-backend.mjs
+        env:
+          APPWRITE_DEPLOY_KEY: ${{ secrets.APPWRITE_DEPLOY_KEY }}
