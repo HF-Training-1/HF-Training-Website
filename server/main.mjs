@@ -1,6 +1,7 @@
 import {Client,Account} from 'node-appwrite';
 import {CONFIG} from './config.mjs';
 import {Store} from './store.mjs';
+import {validPassword} from './learning.mjs';
 import {dispatch} from './domain.mjs';
 import {Problem,requireThat,text} from './policy.mjs';
 export default async ({req,res,error})=>{
@@ -17,8 +18,9 @@ export default async ({req,res,error})=>{
   const body=req.bodyJson;requireThat(body&&typeof body.action==='string','Invalid request.',400);
   const action=body.action,input=body.input||{};
   if(action==='changePassword'){
-   const password=text(input.password,128);requireThat(password.length>=16,'Use at least 16 characters.',400);
-   await account.updatePassword({password,oldPassword:text(input.current,256)});
+   const password=input.password;requireThat(validPassword(password),'Use 8–128 characters, at least one capital letter and one number.',400);
+   requireThat(typeof input.current==='string'&&input.current.length>0&&input.current.length<=256,'Enter your current password.',400);
+   try{await account.updatePassword({password,oldPassword:input.current});}catch(e){if(e.code===401)throw new Problem('Your current password was not accepted. Enter the password for the account shown at the top of this page, or use Forgot password.',400);if(e.code===400)throw new Problem(e.message||'The new password does not meet the account security settings.',400);throw e;}
    await store.setProfile({...actor,mustChange:false});return res.json({ok:true});
   }
   if(action==='me')return res.json({...await dispatch(store,actor,action,input),verified:identity.emailVerification});
