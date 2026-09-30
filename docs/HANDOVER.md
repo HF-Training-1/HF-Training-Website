@@ -1,3 +1,22 @@
+# Update handover — 29 September 2026
+
+The current release instructions are in `UPDATE-INSTRUCTIONS.txt` at the project root. This section supersedes conflicting behaviour described in the historical handover below.
+
+- Profiles now support `signup`, immutable creation timestamp `createdAt` for new accounts, `start`, and explicit `tutors` IDs. Missing `tutors` on legacy profiles preserves academy access. An empty array means no tutor access. Both the named tutor and academy must match. Administrators and IQA retain their existing access.
+- `server/learning.mjs` holds shared date, password, progress, calendar and placement calculations. Review periods are 28 days for VRQ and 84 for NVQ, with explicit recorded next-review dates honoured. Reminders are in-app only.
+- Practical records carry `units` and `{unit,frameworkId,checks}` criterion mappings. Immutable framework records preserve wording/version. Assessor confirmations must be a subset of learner-signed claims. Verified criterion progress requires achieved assessment plus an independent signed IQA record. New final unit sign-offs require full verified coverage of the latest framework; IQA final verification advances finalised-unit progress. Old unmapped evidence is retained but does not silently acquire criterion credit.
+- Attendance is append-only; the most recent record per learner/day is shown and counted. Check-in is a separate unconfirmed record. Batch attendance validates all requested learner permissions before writing and returns saved/failed IDs for retry.
+- Work placement is separate from academy attendance and learning-hour totals. One active log per learner/day; after a tutor returns it, a new signed replacement references the earlier log. Weekly targets count separate days, and approved totals exclude unconfirmed/returned logs. The three six-hour-day target is this academy’s VRQ configuration, not a claim about all VRQ qualifications.
+- My account exposes own basic details and limited contact edits; role/email/course/academy cannot be changed through contactUpdate.
+- Password changes require 8–128 characters, uppercase A–Z and a digit, preserve whitespace, and accept existing shorter current passwords. Both UI and backend enforce new-password rules. The direct Appwrite recovery route also requires matching project password-strength settings (manual console configuration).
+- Resource attachments use the existing private bucket and course-scoped authorised download. Editable original starter texts are provided in the admin publishing form; nothing is automatically seeded into live records.
+- The new deployment workflow updates the existing function with a temporary functions.read/functions.write key, without provisioning or changing data/schema/permissions.
+- The build now uses callback string replacements so JavaScript dollar sequences are not interpreted as replacement metacharacters when embedding the bundle in HTML.
+
+Operational limits: no email/push reminder scheduler; no separate tutor-versus-assessor role split; no imported approved qualification criteria; no automated certification. Checklist wording must explicitly represent any required repeated observations/ranges—percentages count checklist entries, not automatic interpretation of awarding-body rules. Unit frameworks can be republished but old signed records keep the old version, so new framework coverage starts separately. Raw audit records remain in exports. Large rosters currently read records per assigned learner and should be indexed/paginated before substantial growth. Single-record payload limit remains 14,000 characters and file limit 1 MB. Pending/approved placement logs cannot be edited; a tutor must return a pending log to enable a signed replacement. An already approved decision is immutable.
+
+## Historical handover
+
 # HF Training — developer handover
 
 This package is a first Appwrite-backed deployment candidate. It has local policy and simulated browser coverage, but has not been deployed to or tested against the owner's Appwrite project. A working cloud integration and a security/privacy review remain release gates. Do not describe it as a complete, validated learning-management product.
@@ -64,3 +83,6 @@ Setup is deliberately explicit through workflow_dispatch. Never add secrets to c
 | New function | hfapi |
 
 Region endpoint: https://fra.cloud.appwrite.io/v1
+
+
+The supplied consultation and VRQ marking sheets are included in this revision. See docs/ASSESSMENT-SHEET-NOTES.md (ASSESSMENT-SHEET-NOTES.md within docs) for coverage, marking rules and missing requirements. The source module is server/assessment-sheets.mjs.
